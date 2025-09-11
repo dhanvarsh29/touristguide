@@ -1,0 +1,36 @@
+name: tourist_guide
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ^3.9.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # ✅ Firebase dependencies
+  firebase_core: ^3.15.2
+  firebase_auth: ^5.7.0
+
+  # (Optional) For Google sign-in later
+  google_sign_in: ^6.2.1
+
+  # (Optional) State management helper
+  provider: ^6.1.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/img1.jpg
+    - assets/img2.jpg
+    - assets/img3.jpg
+    - assets/img4.jpg
+    - assets/jharkhand_map.jpg
