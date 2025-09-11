@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'chatbot_page.dart'; // ✅ create this file for chatbot UI
+
 
 class TouristHomePage extends StatelessWidget {
   @override
@@ -6,6 +8,7 @@ class TouristHomePage extends StatelessWidget {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
+          // ✅ SliverAppBar with Map
           SliverAppBar(
             expandedHeight: 250.0,
             pinned: true,
@@ -14,7 +17,7 @@ class TouristHomePage extends StatelessWidget {
                 fit: StackFit.expand,
                 children: [
                   Image.asset(
-                    "assets/jharkhand_map.jpg", // ✅ map image
+                    "assets/jharkhand_map.jpg",
                     fit: BoxFit.cover,
                   ),
                   Container(
@@ -35,8 +38,8 @@ class TouristHomePage extends StatelessWidget {
                           prefixIcon: Icon(Icons.menu),
                           suffixIcon: Icon(Icons.search),
                           border: InputBorder.none,
-                          contentPadding: EdgeInsets.symmetric(
-                              horizontal: 15, vertical: 12),
+                          contentPadding:
+                              EdgeInsets.symmetric(horizontal: 15, vertical: 12),
                         ),
                       ),
                     ),
@@ -45,34 +48,68 @@ class TouristHomePage extends StatelessWidget {
               ),
             ),
           ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("Welcome!",
-                      style:
-                          TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
-                  SizedBox(height: 5),
-                  Text("What are you planning today?",
-                      style: TextStyle(fontSize: 16)),
-                  SizedBox(height: 20),
-                  GridView.count(
-                    crossAxisCount: 2,
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    mainAxisSpacing: 10,
-                    crossAxisSpacing: 10,
+
+          // ✅ Scrollable Content
+          SliverList(
+            delegate: SliverChildListDelegate(
+              [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      placeCard("Baidyanath Jyotirlinga Temple", "assets/img1.jpg"),  // ✅ fixed
-                      placeCard("Parasnath Hills", "assets/img2.jpg"), // ✅ fixed
-                      placeCard("Netarhat", "assets/img3.jpg"),    // ✅ fixed
-                      placeCard("Hundru Falls", "assets/img4.jpg"),        // ✅ fixed
+                      // ✅ Welcome + Chatbot logo next to text
+                      Row(
+                        children: [
+                          Text(
+                            "Welcome!",
+                            style: TextStyle(
+                              fontSize: 28,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ChatbotPage()),
+                              );
+                            },
+                            child: Image.asset(
+                              "assets/chatbot.jpg", // ✅ your chatbot logo
+                              width: 35,
+                              height: 35,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 5),
+                      Text(
+                        "What are you planning today?",
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      SizedBox(height: 20),
+
+                      // ✅ Grid of places
+                      GridView.count(
+                        crossAxisCount: 2,
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        mainAxisSpacing: 10,
+                        crossAxisSpacing: 10,
+                        children: [
+                          placeCard("Baidyanath Jyotirlinga Temple", "assets/img1.jpg"),
+                          placeCard("Parasnath Hills", "assets/img2.jpg"),
+                          placeCard("Netarhat", "assets/img3.jpg"),
+                          placeCard("Hundru Falls", "assets/img4.jpg"),
+                        ],
+                      ),
                     ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ],

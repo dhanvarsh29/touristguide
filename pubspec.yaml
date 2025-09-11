@@ -20,6 +20,9 @@ dependencies:
   # (Optional) State management helper
   provider: ^6.1.2
 
+  # ✅ HTTP for API calls
+  http: 1.5.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -38,4 +41,4 @@ flutter:
     - assets/img4.jpg
     - assets/jharkhand_map.jpg
     - assets/splash.jpg
-
+    - assets/chatbot.jpg
