@@ -65,7 +65,7 @@ class TouristHomePage extends StatelessWidget {
                     mainAxisSpacing: 10,
                     crossAxisSpacing: 10,
                     children: [
-                      placeCard("Deoghar Temple", "assets/img1.jpg"),  // ✅ fixed
+                      placeCard("Baidyanath Jyotirlinga Temple", "assets/img1.jpg"),  // ✅ fixed
                       placeCard("Parasnath Hills", "assets/img2.jpg"), // ✅ fixed
                       placeCard("Netarhat", "assets/img3.jpg"),    // ✅ fixed
                       placeCard("Hundru Falls", "assets/img4.jpg"),        // ✅ fixed
