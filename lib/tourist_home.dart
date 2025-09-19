@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'chatbot_page.dart'; // ✅ chatbot UI
+import 'chatbot_page.dart'; // ✅ make sure this file exists
 
 class TouristHomePage extends StatefulWidget {
   @override
@@ -13,8 +13,8 @@ class _TouristHomePageState extends State<TouristHomePage> {
   String selectedCategory = "Nature";
   Map<String, dynamic>? itinerary;
 
-  // Replace with your server URL
-  final String flaskUrl = "http://127.0.0.1:5000/itinerary";
+  // Replace with your Flask server IP if running externally
+  final String flaskUrl = "http://192.168.11.176:5000/itinerary";
 
   Future<void> fetchItinerary() async {
     int days = int.tryParse(_daysController.text) ?? 1;
@@ -33,18 +33,15 @@ class _TouristHomePageState extends State<TouristHomePage> {
         setState(() {
           itinerary = jsonDecode(response.body);
         });
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Itinerary Loaded!")),
-        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Itinerary Loaded!")));
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Error fetching plan")),
-        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Error fetching plan")));
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Cannot connect to server")),
-      );
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("Cannot connect to server")));
     }
   }
 
@@ -52,20 +49,13 @@ class _TouristHomePageState extends State<TouristHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Jharkhand Travel Guide"),
-        backgroundColor: Colors.green,
-        leading: IconButton(
-          icon: Icon(Icons.menu),
-          onPressed: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text("Menu clicked")),
-            );
-          },
-        ),
+        title: Text("Tourist Guide Jharkhand"),
+        backgroundColor: Colors.green.shade700,
+        leading: Icon(Icons.menu), // ✅ three bar menu
       ),
       body: CustomScrollView(
         slivers: [
-          // ✅ Top Jharkhand Map Section
+          // ✅ SliverAppBar replaced with clickable map card
           SliverToBoxAdapter(
             child: GestureDetector(
               onTap: () {
@@ -77,30 +67,26 @@ class _TouristHomePageState extends State<TouristHomePage> {
                 );
               },
               child: Container(
-                height: 250,
+                margin: EdgeInsets.all(12),
+                height: 220,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
                         color: Colors.black26,
                         blurRadius: 8,
                         offset: Offset(0, 4))
                   ],
-                ),
-                margin: EdgeInsets.all(16),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image.asset(
-                    "assets/jharkhand_map.jpg",
+                  image: DecorationImage(
+                    image: AssetImage("assets/jharkhand_map.jpg"),
                     fit: BoxFit.cover,
-                    width: double.infinity,
                   ),
                 ),
               ),
             ),
           ),
 
-          // ✅ Rest of the body
+          // ✅ Main content
           SliverList(
             delegate: SliverChildListDelegate(
               [
@@ -109,7 +95,7 @@ class _TouristHomePageState extends State<TouristHomePage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // ✅ Welcome + Chatbot logo FIXED
+                      // ✅ Welcome + chatbot logo
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -126,34 +112,26 @@ class _TouristHomePageState extends State<TouristHomePage> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => ChatbotPage(),
-                                ),
+                                    builder: (context) => ChatbotPage()),
                               );
                             },
                             child: CircleAvatar(
                               radius: 28,
                               backgroundColor: Colors.green.shade100,
-                              child: ClipOval(
-                                child: Image.asset(
-                                  "assets/chatbot.jpg",
-                                  fit: BoxFit.cover,
-                                  width: 50,
-                                  height: 50,
-                                ),
-                              ),
+                              backgroundImage:
+                                  AssetImage("assets/chatbot.jpg"), // ✅ asset
                             ),
                           ),
                         ],
                       ),
-                      SizedBox(height: 8),
+                      SizedBox(height: 5),
                       Text(
                         "What are you planning today?",
-                        style:
-                            TextStyle(fontSize: 16, color: Colors.grey[700]),
+                        style: TextStyle(fontSize: 16),
                       ),
-                      SizedBox(height: 25),
+                      SizedBox(height: 20),
 
-                      // ✅ Plan Itinerary Section
+                      // ✅ Itinerary Planner Section
                       Text(
                         "Plan Your Itinerary",
                         style: TextStyle(
@@ -205,13 +183,13 @@ class _TouristHomePageState extends State<TouristHomePage> {
                         ),
                         onPressed: fetchItinerary,
                         icon: Icon(Icons.map, color: Colors.white),
-                        label: Text("Generate Plan",
+                        label: Text("Generate",
                             style: TextStyle(
                                 fontSize: 16, color: Colors.white)),
                       ),
                       SizedBox(height: 30),
 
-                      // ✅ Display the generated itinerary
+                      // ✅ Display itinerary
                       if (itinerary != null)
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -220,28 +198,16 @@ class _TouristHomePageState extends State<TouristHomePage> {
                             final spots = entry.value as List<dynamic>;
                             return Padding(
                               padding: EdgeInsets.symmetric(vertical: 8),
-                              child: Card(
-                                color: Colors.green[50],
-                                elevation: 2,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12)),
-                                child: Padding(
-                                  padding: EdgeInsets.all(12),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(day,
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold)),
-                                      SizedBox(height: 6),
-                                      ...spots.map((spot) => Text(
-                                          "• ${spot['name']} (${spot['duration']} hrs)",
-                                          style: TextStyle(fontSize: 14))),
-                                    ],
-                                  ),
-                                ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(day,
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold)),
+                                  ...spots.map((spot) => Text(
+                                      "- ${spot['name']} (${spot['duration']} hrs)")),
+                                ],
                               ),
                             );
                           }).toList(),
@@ -249,21 +215,14 @@ class _TouristHomePageState extends State<TouristHomePage> {
 
                       SizedBox(height: 30),
 
-                      // ✅ Popular Places Grid
-                      Text(
-                        "Popular Destinations",
-                        style: TextStyle(
-                            fontSize: 22, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: 15),
-
+                      // ✅ Grid of sample places (perfect alignment)
                       GridView.count(
                         crossAxisCount: 2,
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
                         mainAxisSpacing: 12,
                         crossAxisSpacing: 12,
-                        childAspectRatio: 0.9,
+                        childAspectRatio: 1, // ✅ perfect squares
                         children: [
                           placeCard("Baidyanath Jyotirlinga Temple",
                               "assets/img1.jpg"),
@@ -272,6 +231,36 @@ class _TouristHomePageState extends State<TouristHomePage> {
                           placeCard("Hundru Falls", "assets/img4.jpg"),
                         ],
                       ),
+
+                      SizedBox(height: 30),
+
+                      // ✅ Emergency & Tourism Helplines Section
+                      Text(
+                        "Emergency & Tourism Helplines",
+                        style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.green.shade700),
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(height: 20),
+
+                      Wrap(
+                        spacing: 12,
+                        runSpacing: 12,
+                        children: [
+                          helplineCard("Tourist Information Center",
+                              "0651-2400496"),
+                          helplineCard(
+                              "Jharkhand Tourism Office", "0651-2331828"),
+                          helplineCard(
+                              "Emergency Services (Dial 112)", "112"),
+                          helplineCard("Police Helpline", "100"),
+                          helplineCard("Ambulance", "102"),
+                          helplineCard("Railway Enquiry", "139"),
+                        ],
+                      ),
+                      SizedBox(height: 30),
                     ],
                   ),
                 ),
@@ -283,7 +272,6 @@ class _TouristHomePageState extends State<TouristHomePage> {
     );
   }
 
-  // ✅ Reusable Place Card
   Widget placeCard(String title, String imagePath) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -291,9 +279,8 @@ class _TouristHomePageState extends State<TouristHomePage> {
       clipBehavior: Clip.antiAlias,
       child: Stack(
         children: [
-          Positioned.fill(
-            child: Image.asset(imagePath, fit: BoxFit.cover),
-          ),
+          Image.asset(imagePath,
+              fit: BoxFit.cover, width: double.infinity, height: double.infinity),
           Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -306,19 +293,18 @@ class _TouristHomePageState extends State<TouristHomePage> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
-              padding: EdgeInsets.all(10),
+              padding: EdgeInsets.all(8),
               child: Text(
                 title,
-                textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: 15,
                   shadows: [
                     Shadow(
-                        blurRadius: 6,
-                        color: Colors.black,
-                        offset: Offset(2, 2))
+                      blurRadius: 6,
+                      color: Colors.black,
+                      offset: Offset(2, 2),
+                    )
                   ],
                 ),
               ),
@@ -328,22 +314,47 @@ class _TouristHomePageState extends State<TouristHomePage> {
       ),
     );
   }
+
+  Widget helplineCard(String title, String number) {
+    return SizedBox(
+      width: 160,
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        elevation: 3,
+        child: Padding(
+          padding: EdgeInsets.all(12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(Icons.phone, color: Colors.pink),
+              SizedBox(height: 8),
+              Text(title,
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.black87)),
+              SizedBox(height: 4),
+              Text(number, style: TextStyle(color: Colors.black54)),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
 
-// ✅ Full Map Page
+// ✅ Separate full map page
 class FullMapPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Jharkhand Map"),
-        backgroundColor: Colors.green,
+        backgroundColor: Colors.green.shade700,
       ),
       body: Center(
         child: InteractiveViewer(
           panEnabled: true,
-          minScale: 0.8,
-          maxScale: 4.0,
+          minScale: 1,
+          maxScale: 4,
           child: Image.asset("assets/jharkhand_map.jpg"),
         ),
       ),
